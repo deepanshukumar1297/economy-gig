@@ -29,17 +29,23 @@ public class Mails extends HttpServlet {
     }
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String email_id=request.getParameter("email");
+		String email=request.getParameter("email");
 		
-		SendEmail sendEmail = new SendEmail();
-		String message = sendEmail.sendEmail(email_id);
+		if(email.equals("admin@admin.com")) {
+			response.sendRedirect("admin.jsp");
+		}
+		else {
+			SendEmail sendEmail = new SendEmail();
+			String message = sendEmail.sendEmail(email);
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("verification_code", message);
+			session.setAttribute("email", email);
+			
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("verification.jsp");
+			requestDispatcher.forward(request, response);
+		}
 		
-		HttpSession session = request.getSession();
-		session.setAttribute("verification_code", message);
-		session.setAttribute("email", email_id);
-		
-		RequestDispatcher requestDispatcher = request.getRequestDispatcher("verification.jsp");
-		requestDispatcher.forward(request, response);
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
