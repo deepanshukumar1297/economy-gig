@@ -1,4 +1,4 @@
-package Dao;
+package dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -72,5 +72,54 @@ public class DInfo {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	/**
+	 * 
+	 * @param email
+	 * @return info object having information about already signed in users.
+	 */
+	public Info fetch(String email) {
+		getCon();
+		String query= "select * from info where email="+email;  
+		Info info = new Info();
+		try
+		{
+			Connection con=DriverManager.getConnection(url, uname, pass);
+			Statement st= con.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			while(rs.next())
+			{
+				String aadhar_card = rs.getString("aadhar_card");
+				String name=rs.getString("name");
+				String contact_number=rs.getString("contact_number");			
+				info.setAadhar_card(aadhar_card);
+				info.setContact_number(contact_number);
+				info.setName(name);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return info;
+	}
+
+	public boolean deleteAccount(String email) {
+		getCon();
+		String query= String.format("delete from info where email=('%s')",email);
+		try
+		{
+			Connection con=DriverManager.getConnection(url, uname, pass);
+			Statement st= con.createStatement();
+			st.executeUpdate(query);
+			return true;
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return false;
+		
 	}
 }
