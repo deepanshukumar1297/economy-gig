@@ -1,37 +1,26 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import pojo.Skill;
+
 public class DSkill {
 
-	String url="jdbc:mysql://localhost:3306/gig_economy";
-	String uname="root";
-	String pass="root";
-	
-	public void getCon()  
-	{
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
+	public boolean exception;
+	GetConnection get=new GetConnection();
+	Connection con = get.getCon();
 	
 	public ArrayList<String> fetch() 
 	{
 		ArrayList<String> skill= new ArrayList<String>();
-		getCon();
-		String query= "select student_id ,student_name ,section_id from student ORDER BY student_name, student_id";
+		String query= "select skills from skill order by skills";
 		try
 		{
-			Connection con=DriverManager.getConnection(url, uname, pass);
 			Statement st= con.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			while(rs.next())
@@ -39,10 +28,34 @@ public class DSkill {
 				String skill_type = rs.getString(1);
 				skill.add(skill_type);
 			}
+			exception=false;
 		}
 		catch(SQLException e){
 			e.printStackTrace();
+			exception=true;
 		}
 		return skill;
+	}
+	
+	public boolean insert()
+	{
+		String query= "insert into info values(?)";	//email , name , contact_no , aadhar_card
+		Skill skill = new Skill();
+		try
+		{
+			PreparedStatement pst= con.prepareStatement(query);
+			
+			pst.setString(1, skill.getSkills());
+			
+			pst.addBatch();
+			
+			pst.executeBatch();
+			return true;
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

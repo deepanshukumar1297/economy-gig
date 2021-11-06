@@ -1,4 +1,4 @@
-package profile_Account;
+package login;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dao.DInfo;
+
 
 /**
  * Servlet implementation class DeleteAccount
@@ -31,7 +32,7 @@ public class DeleteAccount extends HttpServlet {
 		String email = (String)session.getAttribute("email");
 		
 		DInfo dInfo = new DInfo();
-		boolean status=dInfo.deleteAccount(email);
+		//boolean status=dInfo.deleteAccount(email);
 	}
 
 }

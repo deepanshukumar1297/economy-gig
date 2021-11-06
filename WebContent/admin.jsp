@@ -38,7 +38,6 @@
 	  		<tr>
 	  			<td><%= s.toUpperCase() %></td>
 	  		</tr>
-	  		</tr>
 	  							<% 
                                     }
                                 %>
@@ -46,6 +45,10 @@
 	  </table>
 	  
 	  add skill ka bnana bacha h
+	  <form action="Admin">
+	  	<input type="text" requierd name="skills" placeholder="Enter The Skills">
+	  	<input type="submit">
+	  </form>
 	
 </body>
 </html>

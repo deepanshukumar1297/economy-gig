@@ -19,14 +19,8 @@ import pojo.SendEmail;
 @WebServlet("/Mails")
 public class Mails extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Mails() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+    public Mails() {super(); }
+    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String email=request.getParameter("email");
@@ -38,12 +32,16 @@ public class Mails extends HttpServlet {
 			SendEmail sendEmail = new SendEmail();
 			String message = sendEmail.sendEmail(email);
 			
-			HttpSession session = request.getSession();
-			session.setAttribute("verification_code", message);
-			session.setAttribute("email", email);
+			if(sendEmail.exception==false) {
+				HttpSession session = request.getSession();
+				session.setAttribute("verification_code", message);
+				session.setAttribute("email", email);
+				
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher("verification.jsp");
+				requestDispatcher.forward(request, response);
+			}
+			else response.sendRedirect("exception.html");
 			
-			RequestDispatcher requestDispatcher = request.getRequestDispatcher("verification.jsp");
-			requestDispatcher.forward(request, response);
 		}
 		
 		//response.getWriter().append("Served at: ").append(request.getContextPath());

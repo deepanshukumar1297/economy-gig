@@ -1,6 +1,11 @@
 package pojo;
 
 public class Info {
+	@Override
+	public String toString() {
+		return "Info [name=" + name + ", contact_number=" + contact_number + ", email_id=" + email_id + ", aadhar_card="
+				+ aadhar_card + "]";
+	}
 	private String name;
 	private String contact_number;
 	private String email_id;
@@ -30,5 +35,4 @@ public class Info {
 	public void setAadhar_card(String aadhar_card) {
 		this.aadhar_card = aadhar_card;
 	}
-
 }

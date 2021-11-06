@@ -7,10 +7,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form action="Account">
+	<form action="Accounts">
 		<input type="text" placeholder="Enter you name" required name="name">
 		<input type="text" placeholder="Enter your contact_number" required name="contact_number">
-		<input type="text" placeholder="Enter you name" required name="aadhar_card">
+		<input type="text" placeholder="aadhar card" required name="aadhar_card">
 		<input type="submit" value="submit the information">
 	</form>
 </body>
