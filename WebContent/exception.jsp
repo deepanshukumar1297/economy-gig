@@ -1,3 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+
+<%@ page isErrorPage="true" %> 
 <!doctype html>
 <html lang="en">
   <head>
@@ -29,6 +33,7 @@
                 <div class="col d-flex align-items-center justify-content-center">
                     <span >
                         <h3 class="text-muted">Exception Occured Contact Admin . . .</h3>
+                        <h5 id="write"></h5>
                     </span>
                 </div>
             </div>
@@ -57,4 +62,9 @@
   </footer>
     
   </body>
+  <script>
+    document.getElementById("write").innerHTML=new URLSearchParams(window.location.search).get("error");
+    console.log(new URLSearchParams(window.location.search).get("error"));
+    console.log("hello");
+</script>
 </html>

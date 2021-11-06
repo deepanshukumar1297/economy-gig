@@ -12,12 +12,14 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class SendEmail {
-public String sendEmail(String to) {
-		
+
+	public boolean exception;
+	public String sendEmail(String to) {
+
 		String message=  Double.toString(Math.random()).substring(2, 8);
 		String from = "studying.purpose0@gmail.com"; 
 		String subject="verification code";
-		
+
 		//host properties
 		String host="smtp.gmail.com";
 		Properties properties=System.getProperties();
@@ -25,7 +27,7 @@ public String sendEmail(String to) {
 		properties.put("mail.smtp.port", "465");
 		properties.put("mail.smtp.ssl.enable", "true");
 		properties.put("mail.smtp.auth", "true");
-		
+
 		//session object
 		Session session=Session.getInstance(properties, new Authenticator() {
 			@Override
@@ -35,7 +37,7 @@ public String sendEmail(String to) {
 			}
 		});
 		session.setDebug(true);
-		
+
 		//compose message
 		MimeMessage mimeMessage = new MimeMessage(session);
 		try {
@@ -43,13 +45,15 @@ public String sendEmail(String to) {
 			mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 			mimeMessage.setSubject(subject);
 			mimeMessage.setText(message); 
-			
+
 			Transport.send(mimeMessage);
+			exception=false;
 		} catch (MessagingException e) {
 			e.printStackTrace();
+			exception=true;
 		}
-		
+
 		return message;
-		
+
 	}  
 }

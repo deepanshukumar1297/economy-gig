@@ -12,9 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import dao.DInfo;
 
-/**
- * Servlet implementation class Verification
- */
+
 @WebServlet("/Verification")
 public class Verification extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -29,30 +27,30 @@ public class Verification extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String code_entered_by_user=request.getParameter("code");
-//		System.out.println(code_entered_by_user+"user");
 		
 		HttpSession session = request.getSession();
 		String email = (String)session.getAttribute("email");
 		String verification_code = (String)session.getAttribute("verification_code");
-//		System.out.println(verification_code+"system");
-//		System.out.println(email);
 		
 		RequestDispatcher requestDispatcher;
 		DInfo daoInfo = new DInfo();
 		
-		if(code_entered_by_user.equals(verification_code)) {			
-			//old user
-			if(daoInfo.getVerification(email)==true) {
-				System.out.println("profile");
-				requestDispatcher=request.getRequestDispatcher("profile.jsp"); 
-				requestDispatcher.forward(request, response);
+		if(code_entered_by_user.equals(verification_code)) {	
+			int verification = daoInfo.getVerification(email);
+			if(daoInfo.exception==false) {
+				//old user
+				if(verification==1) {
+					requestDispatcher=request.getRequestDispatcher("profile.jsp"); 
+					requestDispatcher.forward(request, response);
+				}
+				//new user
+				else {
+					requestDispatcher=request.getRequestDispatcher("new_account.jsp"); 
+					requestDispatcher.forward(request, response);		
+				}
 			}
-			//new user
-			else {
-				System.out.println("new account");
-				requestDispatcher=request.getRequestDispatcher("new_account.jsp"); 
-				requestDispatcher.forward(request, response);		
-			}
+			//exception occured in database
+			else response.sendRedirect("exception.html");
 		}
 		//wrong verification code given by user
 		else response.getWriter().write("0");
