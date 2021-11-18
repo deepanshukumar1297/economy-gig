@@ -13,18 +13,14 @@ import javax.servlet.http.HttpSession;
 import pojo.SendEmail;
 
 
-/**
- * Servlet implementation class Mails
- */
 @WebServlet("/Mails")
 public class Mails extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     public Mails() {super(); }
     
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		String email=request.getParameter("email");
-		
+				
 		if(email.equals("admin@admin.com")) {
 			response.sendRedirect("admin.jsp");
 		}
@@ -40,7 +36,7 @@ public class Mails extends HttpServlet {
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("verification.jsp");
 				requestDispatcher.forward(request, response);
 			}
-			else response.sendRedirect("exception.html");
+			else response.sendRedirect("exception.jsp");
 			
 		}
 		

@@ -1,19 +1,20 @@
 drop database if exists  gig_economy;
 create database gig_economy;
 use gig_economy;
+
 create table info(
 	email varchar(50) unique not null,
     name varchar(50)  not null,
     contact_number varchar(50) not null,
-    aadhar_card varchar(50) unique not null,
-    primary key(aadhar_card,email)
+    aadhar_card varchar(50)  not null,
+    primary key(email)
     
 );
 create table skill(
-	skill_type varchar(100) primary key
+	skills varchar(100) primary key
 );
 create table employer(
-	aadhar_card varchar(50) ,
+	email varchar(50) ,
     job_id int auto_increment,
     job_title varchar(50),
     date_from date,
@@ -23,17 +24,43 @@ create table employer(
     payment_method varchar(20),
     job_discription varchar(120),
     primary key(job_id),
-    foreign key (aadhar_card) REFERENCES  info(aadhar_card)
+    foreign key (email) REFERENCES  info(email)on update cascade on delete cascade
 );
 create table address(
-	aadhar_card varchar(50) primary key,
+	email varchar(50) primary key,
 	state varchar(20) not null,
     city varchar(25) not null,
     village varchar(30),
-    foreign key(aadhar_card) references info(aadhar_card)
+    foreign key(email) references info(email)on update cascade on delete cascade
 );
-
-#make table for candidates and candidates skill
-
-insert into skill values("construction worker"),("drivers"),("general helpers"),("cleaners"),("security guards"),("farm labour"),("hair slons"),("beauty parlors"),("small grocery stores"),("maids"),("retail outlets");
-insert into info values("deepanshu1297@gmail.com","deepnshu","6265495916","0526d5931475");
+create table candidate(
+	candidate_id int not null auto_increment,
+	self_discription varchar(120),
+    email varchar(50) not null,
+    picture varchar(250),
+    upi_id varchar(50),
+    foreign key(email) references info(email)on update cascade on delete cascade,
+    primary key(candidate_id)
+);
+create table candidate_skill(
+	candidate_id int ,
+    skills varchar(100),
+    foreign key(candidate_id) references candidate(candidate_id)on update cascade on delete cascade,
+    foreign key(skills) references skill(skills)on update cascade on delete cascade,
+    primary key(candidate_id, skills)
+);
+create table job_skill(
+	job_id int ,
+    skills varchar(100),
+    foreign key(skills) references skill(skills)on update cascade on delete cascade,
+    foreign key(job_id) references employer(job_id)on update cascade on delete cascade,
+    primary key(job_id, skills)
+);
+create table job_applied(
+	job_id int not null,
+    candidate_id int not null,
+    approve boolean,
+    foreign key(job_id) references employer(job_id)on update cascade on delete cascade,
+	foreign key(candidate_id) references candidate(candidate_id)on update cascade on delete cascade,
+    primary key(job_id,candidate_id)
+);

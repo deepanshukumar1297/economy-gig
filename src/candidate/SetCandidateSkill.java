@@ -44,20 +44,20 @@ public class SetCandidateSkill extends HttpServlet {
 		String[] actual_skills = new String[actual_number];
 		for(int i=0;i<actual_number;i++)actual_skills[i] = apparent_actual_skills.get(i);
 
+		HttpSession session = request.getSession();
+		Object candidate_id = session.getAttribute("candidate_id");
+		int candidateId=(Integer)candidate_id;
 		
 		DCandidateSkill dCandidateSkill = new DCandidateSkill();
 		CandidateSkill skill = new CandidateSkill();
+		skill.setCandidate_id(candidateId);
 		skill.setSkills(actual_skills);
 
-		HttpSession session = request.getSession();
-		//int candidateId=Integer.parseInt((String)session.getAttribute("candidateId")); -->ClassCastException
-		String candidateId_int=(String)session.getAttribute("candidateId");
-		Object object = new String(candidateId_int);
-		int candidateId=(Integer)object;
 		
-		dCandidateSkill.insert(skill, actual_number, candidateId);
+		
+		dCandidateSkill.insert(skill, actual_number);
 		if(dCandidateSkill.exception==false) {
-			RequestDispatcher requestDispatcher=request.getRequestDispatcher("profile.jsp"); 
+			RequestDispatcher requestDispatcher=request.getRequestDispatcher("candidateSkill.jsp"); 
 			requestDispatcher.forward(request, response);	
 		}
 		else response.sendRedirect("exception.jsp");

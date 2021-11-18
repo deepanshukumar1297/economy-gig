@@ -17,18 +17,21 @@ public class DCandidate {
 	
 	public void insert(Candidate candidate)
 	{
-		String query= "insert into candidate(self_discription,email, picture) values(?,?,?)";
 		try
 		{
-			PreparedStatement pst= con.prepareStatement(query);
-			
-			pst.setString(1, candidate.getSelf_discription());
-			pst.setString(2, candidate.getEmail());
-			pst.setString(3, candidate.getPicture());
-			
-			pst.addBatch();
-			pst.executeBatch();
-			exception=false;
+			if(!con.createStatement().executeQuery(String.format("select email from candidate where email=('%s')", candidate.getEmail())).next()) {
+				String query= "insert into candidate(self_discription,email, picture) values(?,?,?)";
+				PreparedStatement pst= con.prepareStatement(query);
+				
+				pst.setString(1, candidate.getSelf_discription());
+				pst.setString(2, candidate.getEmail());
+				pst.setString(3, candidate.getPicture());
+				
+				pst.addBatch();
+				pst.executeBatch();
+				exception=false;
+			}
+			else exception=true;
 		}
 		catch(SQLException e)
 		{
@@ -108,5 +111,40 @@ public class DCandidate {
 		}
 		return candidate_id;
 		
+	}
+	
+	public Candidate fetchInfo(int candidateId) {
+		
+		Candidate candidate = new Candidate();
+		
+		String query= String.format("select * from candidate where candidate_id=%d",candidateId);  
+		//System.out.println(query);
+		
+		try
+		{
+			ResultSet rs= con.createStatement().executeQuery(query);
+			while(rs.next())
+			{
+				int candidate_id=rs.getInt("candidate_id");
+				String self_description=rs.getString("self_discription");	
+				String upi_id = rs.getString("upi_id");
+				String email=rs.getString("email");
+				//Blob picture = rs.getBlob("picture");
+				candidate.setSelf_discription(self_description);
+				candidate.setUpi_id(upi_id);
+				//candidate.setPicture(picture);
+				candidate.setCandidate_id(candidate_id);
+				candidate.setEmail(email);
+				
+				
+			}
+			exception=false;
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			exception=true;
+		}
+		return candidate;
 	}
 }

@@ -2,7 +2,6 @@ package login;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,12 +14,12 @@ import pojo.Info;
 @WebServlet("/Accounts")
 public class Accounts extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private RequestDispatcher requestDispatcher;
     public Accounts() { super();}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String name=request.getParameter("name");
 		String contact_number=request.getParameter("contact_number");
 		String aadhar_card=request.getParameter("aadhar_card");
+		String choose=request.getParameter("choose");
 		
 		HttpSession session = request.getSession();
 		String email = (String)session.getAttribute("email");
@@ -37,10 +36,10 @@ public class Accounts extends HttpServlet {
 		dInfo.insert(info);
 		
 		if(dInfo.exception==false) {
-			requestDispatcher = request.getRequestDispatcher("profile.jsp");
-			requestDispatcher.forward(request, response);
+			if(choose.equals("employer"))request.getRequestDispatcher("employer.jsp").forward(request, response);
+			if(choose.equals("candidate")) request.getRequestDispatcher("candidate.jsp").forward(request, response);
 		}
-		else response.sendRedirect("exception.html");
+		else response.sendRedirect("exception.jsp");
 	}
 
 }

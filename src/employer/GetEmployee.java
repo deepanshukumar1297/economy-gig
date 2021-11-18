@@ -53,8 +53,9 @@ public class GetEmployee extends HttpServlet {
 		employer.setEmail(email);
 				
 		//--------------------------------------------------
-		
+		System.out.println(request.getParameter("number")+" get employee");
 		int number=Integer.parseInt(request.getParameter("number"));
+		
 		String[] all_skill= new String[number];
 		String[] skill_status = new String[number];
 
@@ -75,13 +76,12 @@ public class GetEmployee extends HttpServlet {
 		DJobSkill djobSkill = new DJobSkill();
 
 
-		dEmployer.insert(employer);
+		int jobId = dEmployer.insert(employer);
 		if(dEmployer.exception==false) {
-			int jobId = dEmployer.jobId(email);
 			if(dEmployer.exception==false && jobId!=0) {
 				djobSkill.insert(skill, actual_number, jobId);
 				if(djobSkill.exception==false) {
-					RequestDispatcher requestDispatcher=request.getRequestDispatcher("profile.jsp"); 
+					RequestDispatcher requestDispatcher=request.getRequestDispatcher("employerProfile.jsp"); 
 					requestDispatcher.forward(request, response);
 				}
 				else response.sendRedirect("exception.jsp");
