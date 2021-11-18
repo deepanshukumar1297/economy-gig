@@ -63,7 +63,7 @@ public class GetCandidate extends HttpServlet {
 		if(dCandidate.exception==false) {
 			int candidateId = dCandidate.candidateId(email);
 			if(dCandidate.exception==false && candidateId!=0) {
-				session.setAttribute("candidateId", candidateId);
+				session.setAttribute("candidate_id", candidateId);
 				RequestDispatcher requestDispatcher=request.getRequestDispatcher("candidateSkill.jsp"); 
 				requestDispatcher.forward(request, response);	
 			}

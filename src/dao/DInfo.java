@@ -42,7 +42,7 @@ public class DInfo {
 		String query= String.format("select email from info where email=('%s')",email);
 		try
 		{
-			if(con.createStatement().executeQuery(query).next()){return 1;}
+			if(con.createStatement().executeQuery(query).next())return 1;
 			exception=false;
 		}
 		catch(SQLException e)
